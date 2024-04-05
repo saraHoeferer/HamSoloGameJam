@@ -1,24 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks.Sources;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
 
+public enum playerRole {Warrior = 0, Magician = 1, Archer = 2}
 public class playerController : MonoBehaviour
 {
     [SerializeField] Tilemap interactionMap;
     [SerializeField] Tilemap collisionMap;
 
+    [SerializeField] GameObject nextPlayer;
+
     [SerializeField] Camera camera;
+    
+    public playerRole role;
 
     public int movementPoints;
 
+    public int[] range = {1, 3, 2};
+
+    public int health;
+
+    public int attack;
+
     private PlayerInputs controls;
+
+    private selectController selectController;
 
     public void Awake()
     {
         controls = new PlayerInputs();
+        selectController = GameObject.Find("GameLogic").GetComponent<selectController>();
     }
 
     private void Update()
@@ -32,9 +47,10 @@ public class playerController : MonoBehaviour
             Debug.Log(interactionMap.WorldToCell(transform.position));
             Debug.Log(gridPosition);
             Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition)*-1);
-            Vector2 direction = new Vector2(movement.x, movement.y);
-            //Move(direction);
+
             moveTileByTile(movement);
+
+            transform.GetComponent<playerController>().enabled = false;
             
             /*
             Debug.Log(gridPosition);
@@ -58,10 +74,20 @@ public class playerController : MonoBehaviour
             {
                 break;
             }
-            Move(direction);
+            if (!Move(direction)) {
+                break;
+            }
             movement--;
             yield return wait;
         }
+        Debug.Log(role);
+        Debug.Log((int)role);
+        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), range[(int)role]);
+
+            Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
+            if (neighbour != null) {
+                Debug.Log("ANGRIFF!");
+            }
     }
 
 
@@ -98,23 +124,29 @@ public class playerController : MonoBehaviour
         controls.Main.Movement.performed += ctx => Move(ctx.ReadValue<Vector2>());
     }
 
-    private void Move(Vector2 direction)
+    private bool Move(Vector2 direction)
     {
         Debug.Log(direction);
         direction.y = direction.y * 0.64f;
         direction.x = direction.x * 0.64f;
-        if (CanMove(direction)) 
+        Vector3Int gridPosition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
+       
+      
+        if (CanMove(gridPosition)) 
         {
             transform.position += (Vector3)direction;
+            return true;
         }
+        return false;
+
+        
     }
 
-    private bool CanMove(Vector2 direction)
+    private bool CanMove(Vector3Int gridPosition)
     {
-        Vector3Int gridPostition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
-        Debug.Log(gridPostition);
-        if (!interactionMap.HasTile(gridPostition) || collisionMap.HasTile(gridPostition))
+        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) || selectController.checkForNeighboursNextPosition(gridPosition))
         {
+            Debug.Log("here");
             return false;
         }
         return true;    
