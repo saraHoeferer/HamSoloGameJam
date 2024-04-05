@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour
 
     public int movementPoints;
 
-    public int[] range = {1, 3, 2};
+    private int[] range = {1, 3, 2};
 
     public int health;
 
