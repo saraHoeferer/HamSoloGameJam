@@ -219,8 +219,7 @@ public class playerController : MonoBehaviour
 
                 if (health <= 0)
                 {
-                    gameObject.SetActive(false);
-                    if (selectController.AllAlliesDead())
+                    if (selectController.AllAlliesDead() == 4)
                     {
                         if (nextPlayer.name == "Player1")
                             SceneManager.LoadScene("Player2Win");
@@ -231,6 +230,7 @@ public class playerController : MonoBehaviour
 
                         SceneManager.UnloadSceneAsync("SaraScene");
                     }
+                    gameObject.SetActive(false);
                 }
             }
 

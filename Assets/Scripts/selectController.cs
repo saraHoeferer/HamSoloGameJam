@@ -76,15 +76,16 @@ public class selectController : MonoBehaviour
         return true;
     }
     
-    public bool AllAlliesDead()
+    public int AllAlliesDead()
     {
+        var count = 0;
         foreach (var ally in allies)
         {
-            if (ally.activeInHierarchy)
-                return false;
+            if (!ally.activeInHierarchy)
+                count++;
         }
-
-        return true;
+        
+        return count;
     }
 
     public List<GameObject> checkForEnemy(Vector3 position, int range)
