@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SaraScene");
         SceneManager.UnloadSceneAsync("Main Menu");
     }
 

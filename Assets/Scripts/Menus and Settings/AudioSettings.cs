@@ -17,7 +17,7 @@ public class AudioSettings : MonoBehaviour
     void Start()
     {
         
-        if(SceneManager.GetSceneByName("SampleScene").IsValid())
+        if(SceneManager.GetSceneByName("SaraScene").IsValid())
             button.SetActive(true);
         
         if (volumeEffect && volumeMusic)
@@ -72,6 +72,6 @@ public class AudioSettings : MonoBehaviour
     {
         SceneManager.LoadScene("Main Menu");
         SceneManager.UnloadSceneAsync("Options");
-        SceneManager.UnloadSceneAsync("SampleScene");
+        SceneManager.UnloadSceneAsync("SaraScene");
     }
 }

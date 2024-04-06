@@ -115,7 +115,7 @@ public class playerController : MonoBehaviour
                 if (selectController.AllEnemiesDead())
                 {
                     SceneManager.LoadScene("Win");
-                    SceneManager.UnloadSceneAsync("SampleScene");
+                    SceneManager.UnloadSceneAsync("SaraScene");
                 }
             }
         }
