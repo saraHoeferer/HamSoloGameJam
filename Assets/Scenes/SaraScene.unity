@@ -5922,7 +5922,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 1
-  movementPoints: 10
 --- !u!4 &348580366
 Transform:
   m_ObjectHideFlags: 0
@@ -6188,7 +6187,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 2
-  movementPoints: 5
 --- !u!4 &372433017
 Transform:
   m_ObjectHideFlags: 0
@@ -7413,6 +7411,7 @@ MonoBehaviour:
   attack: 140000001200000016000000
   defense: 0e0000000b0000000b000000
   critChance: 000000003200000000000000
+  movementSpeed: 060000000700000009000000
 --- !u!4 &788447180
 Transform:
   m_ObjectHideFlags: 0
@@ -7715,7 +7714,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 5
 --- !u!1 &831985482
 GameObject:
   m_ObjectHideFlags: 0
@@ -8136,7 +8134,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 1
-  movementPoints: 100
 --- !u!1 &1015615440
 GameObject:
   m_ObjectHideFlags: 0
@@ -9184,7 +9181,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 20
 --- !u!4 &1380854238
 Transform:
   m_ObjectHideFlags: 0
@@ -9987,7 +9983,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 2
-  movementPoints: 5
 --- !u!4 &1524434915
 Transform:
   m_ObjectHideFlags: 0
@@ -10701,7 +10696,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 20
 --- !u!1 &1619438442
 GameObject:
   m_ObjectHideFlags: 0
@@ -10737,7 +10731,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 5
 --- !u!4 &1619438444
 Transform:
   m_ObjectHideFlags: 0
@@ -11224,7 +11217,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 2
-  movementPoints: 5
 --- !u!1 &1713155431
 GameObject:
   m_ObjectHideFlags: 0
@@ -11801,7 +11793,6 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 2
-  movementPoints: 5
 --- !u!1 &1925472532
 GameObject:
   m_ObjectHideFlags: 0
