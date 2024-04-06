@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class selectController : MonoBehaviour
@@ -17,37 +18,60 @@ public class selectController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Escape) && !SceneManager.GetSceneByName("Options").IsValid())
         {
-            foreach (GameObject gameObjects in allies)
+            SceneManager.LoadScene("Options", LoadSceneMode.Additive);
+        }
+
+        if (!SceneManager.GetSceneByName("Options").IsValid())
+        {
+            if (Input.GetMouseButtonDown(1))
             {
-                gameObjects.GetComponent<playerController>().enabled = false;
-            }
-
-            Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
-
-            Debug.Log(gridPosition);
-
-
-            foreach (GameObject gameObjects in allies)
-            {
-                Debug.Log("Korrdinaten von den Units " + interactionMap.WorldToCell(gameObjects.transform.position));
-                if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
+                foreach (GameObject gameObjects in allies)
                 {
-                    Debug.Log("Figur von Spieler");
-                    gameObjects.transform.GetComponent<playerController>().enabled = true;
-                    break;
+                    gameObjects.GetComponent<playerController>().enabled = false;
+                }
+
+                Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
+
+                Debug.Log(gridPosition);
+
+
+                foreach (GameObject gameObjects in allies)
+                {
+                    Debug.Log("Korrdinaten von den Units " + interactionMap.WorldToCell(gameObjects.transform.position));
+                    if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
+                    {
+                        Debug.Log("Figur von Spieler");
+                        gameObjects.transform.GetComponent<playerController>().enabled = true;
+                        break;
+                    }
                 }
             }
+
         }
     }
-    
-    public GameObject checkForEnemy(Vector3 position, int range) {
-        foreach (GameObject gameObject in enemies) {
+
+    public bool AllEnemiesDead()
+    {
+        foreach (var enemie in enemies)
+        {
+            if (enemie.activeInHierarchy)
+                return false;
+        }
+
+        return true;
+    }
+
+    public GameObject checkForEnemy(Vector3 position, int range)
+    {
+        foreach (GameObject gameObject in enemies)
+        {
             Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
             float distance = Vector3.Distance(position, enemyPosition);
-            if (distance <= range) {
+            if (distance <= range)
+            {
                 return gameObject;
             }
         }
@@ -76,4 +100,3 @@ public class selectController : MonoBehaviour
         return false;
     }
 }
-
