@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -24,14 +24,16 @@ public class playerController : MonoBehaviour
 
     public playerRole role;
 
+    private TextMeshProUGUI remainingMoves;
+    private TextMeshProUGUI unitClass;
     public int movementPoints;
     private int currentMovementPoints;
 
     private selectController selectController;
-
     private int health;
-
     private gameLogic gameLogic;
+    private bool showDestination;
+    private Transform destinationFlag;
 
     public void Awake()
     {
@@ -39,12 +41,22 @@ public class playerController : MonoBehaviour
         gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
         health = gameLogic.health[(int)role];
         ResetMovePoints();
+        remainingMoves = GameObject.Find("MovementCountText").GetComponent<TextMeshProUGUI>();
+        unitClass = GameObject.Find("UnitClassText").GetComponent<TextMeshProUGUI>();
+        destinationFlag = GameObject.Find("Destination").transform;
     }
 
     public void ResetMovePoints()
     {
         currentMovementPoints = movementPoints;
-        Debug.Log("movepoints reset: " + name + " remaining: " + currentMovementPoints);
+    }
+
+    public void enableFlag()
+    {
+        if (currentMovementPoints > 0)
+        {
+            showDestination = true;
+        }
     }
 
     private void Update()
@@ -53,6 +65,7 @@ public class playerController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                destinationFlag.position = new Vector3(100, 100, 0);
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
                 Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
@@ -62,17 +75,47 @@ public class playerController : MonoBehaviour
                 Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
 
                 moveTileByTile(movement);
-
+                remainingMoves.text = "Remaining Moves: " + currentMovementPoints;
+                unitClass.text = "Type: " + role;
+                
                 transform.GetComponent<playerController>().enabled = false;
+                
+            }
 
-                /*
-                Debug.Log(gridPosition);
-                if (tilemap.HasTile(gridPosition))
+            if (showDestination)
+            {
+                Vector2 hoverPosition = camera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3Int hoverGridPosition = interactionMap.WorldToCell(hoverPosition);
+                Vector3Int difference = (interactionMap.WorldToCell(transform.position) - hoverGridPosition) * -1;
+
+                if (difference.x != 0)
                 {
-                    Debug.Log("tile existend");
-                    Debug.Log(tilemap.GetTile(gridPosition).name);
+                    if (difference.x > currentMovementPoints)
+                    {
+                        difference.x = currentMovementPoints;
+                    }
+                    else if (difference.x < currentMovementPoints * -1)
+                    {
+                        difference.x = currentMovementPoints * -1;
+                    }
+                    destinationFlag.position = new Vector3(transform.position.x + difference.x * 0.16f,
+                        transform.position.y,
+                        transform.position.z);
                 }
-                */
+                else if (difference.y != 0)
+                {
+                    if (difference.y > currentMovementPoints)
+                    {
+                        difference.y = currentMovementPoints;
+                    }
+                    else if (difference.y < currentMovementPoints * -1)
+                    {
+                        difference.y = currentMovementPoints * -1;
+                    }
+                    destinationFlag.position = new Vector3(transform.position.x,
+                        transform.position.y + difference.y * 0.16f,
+                        transform.position.z);
+                }
             }
         }
     }
@@ -80,7 +123,7 @@ public class playerController : MonoBehaviour
 
     private IEnumerator WalkTile(int walk, Vector2 direction)
     {
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        WaitForSeconds wait = new WaitForSeconds(0.25f);
         for (int i = 0; i < walk; i++)
         {
             if (currentMovementPoints == 0)
@@ -97,7 +140,8 @@ public class playerController : MonoBehaviour
             yield return wait;
         }
 
-        Debug.Log(role);
+        destinationFlag.position = new Vector3(100, 100, 0);
+        showDestination = false;
         
         List<GameObject> neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
             gameLogic.range[(int)role]);
@@ -197,7 +241,6 @@ public class playerController : MonoBehaviour
 
     private bool Move(Vector2 direction)
     {
-        Debug.Log(direction);
         direction.y = direction.y * 0.16f;
         direction.x = direction.x * 0.16f;
         Vector3Int gridPosition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
@@ -208,7 +251,6 @@ public class playerController : MonoBehaviour
             transform.position += (Vector3)direction;
             return true;
         }
-
         return false;
     }
 

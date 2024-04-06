@@ -7,14 +7,24 @@ public class selectController : MonoBehaviour
 {
     [SerializeField] Tilemap interactionMap;
     [SerializeField] Camera camera;
-    [SerializeField] GameObject[] allies;
-    [SerializeField] GameObject[] enemies;
+
+    [SerializeField] private Transform opponent;
+
+    private List<GameObject> allies = new List<GameObject>();
+    private List<GameObject> enemies = new List<GameObject>();
 
 
-    private playerController[] _alliesController;
-    private playerController[] _enemiesController;
-    public Dictionary<GameObject, int> movePoints;
-
+    void Start()
+    {
+        foreach (Transform ally in transform)
+        {
+            allies.Add(ally.gameObject);
+        }
+        foreach (Transform enemy in opponent)
+        {
+            enemies.Add(enemy.gameObject);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -35,18 +45,13 @@ public class selectController : MonoBehaviour
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
 
-                Debug.Log(gridPosition);
-
-
                 foreach (GameObject gameObjects in allies)
                 {
-                    Debug.Log("Korrdinaten von den Units " +
-                              interactionMap.WorldToCell(gameObjects.transform.position));
-                    if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) &&
-                        gameObjects.activeSelf)
+
+                    if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
                     {
-                        Debug.Log("Figur von Spieler");
                         gameObjects.transform.GetComponent<playerController>().enabled = true;
+                        gameObjects.transform.GetComponent<playerController>().enableFlag();
                         break;
                     }
                 }
@@ -56,9 +61,9 @@ public class selectController : MonoBehaviour
 
     public bool AllEnemiesDead()
     {
-        foreach (var enemie in enemies)
+        foreach (var enemy in enemies)
         {
-            if (enemie.activeInHierarchy)
+            if (enemy.activeInHierarchy)
                 return false;
         }
 
@@ -67,9 +72,9 @@ public class selectController : MonoBehaviour
     
     public bool AllAlliesDead()
     {
-        foreach (var allie in allies)
+        foreach (var ally in allies)
         {
-            if (allie.activeInHierarchy)
+            if (ally.activeInHierarchy)
                 return false;
         }
 
@@ -109,7 +114,6 @@ public class selectController : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 }
