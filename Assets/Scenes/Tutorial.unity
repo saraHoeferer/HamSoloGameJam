@@ -676,28 +676,26 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "In diesen kleinen taktischen Spiel treten zwei Spieler gegeneinander an.
-    \nJeder Spieler startet mit 5 Einheiten. 2 Krieger, 2 Bogensch\xFCtzen und 1
-    Magier. \n\nZiel des Spieles ist es die Einheiten des anderen Spieler zu besiegen.\nDie
-    Einheiten werden mit Rechtsklick ausgew\xE4hlt und mit Linksklick auf die gew\xFCnschte
-    Position gezogen, insofern die Bewegungspunkte daf\xFCr ausrreichen und keine
-    Hindernisse im Weg sein. Sollte am Ende der Bewegung eine gegenerische Einheit
-    in Reichweite sein, so wird diese angegriffen. Auf der Karte gibt es zwei Kirchen,
-    zu erkennen an ihrem spitzen Dach. Sollte eine Figur in der Kirche stehenbleiben,
-    so werden ein paar Lebenspunkte wiederhergestellt.\n\nJede Einheit hat spezielle
-    Eigenschaften welche die Spieler m\xF6glichst geschickt einsetzen sollen. Anhand
-    dieser Werte und ihrer  jeweiligen St\xE4rke gegn\xFCber anderen wird der Schaden
-    berechnet.\n\nDer Krieger ist eine gepanzerte Einheit welche zwar nur eine geringe
-    Bewegunsweite und Angriffsreichweite hat, daf\xFCr aber gut austeileien und einstecken
-    kann. Ihre R\xFCstung gibt ihnen einen Vorteil gegen\xFCber Magier.\n\nDie Bogensch\xFCtzen
-    sind eine schnelle, stark austeilende Einheit. Sie k\xF6nnen \xFCber zwei Felder
-    Distanz angreifen, halten aber nicht viel aus. Ihre Schnelligkeit gibt ihnen
-    einen Vorteil gegen\xFCber den Kriegern.\n\nDie Magier sind eine besondere Einheit.
-    Ihre arkanen M\xE4chteganz von ihrer Tagesverfassung ab. Mal sind sie besonders
-    m\xE4chtig mal relativ schwach zu sehen an ihren kritischen Treffern. Sie sind
-    weder so schnell wie Bogensch\xFCtzen noch so langsam wie Bogensch\xFCtzen. W\xE4hrend
-    ihre Reichweite so gro\xDF ist wie die der Bogensch\xFCtzen, sind ihre R\xFCstungen
-    besser was ihnen einen Voreil verschafft."
+  m_text: "In this small tactical game, two players compete against each other. \nEach
+    player starts with a 5 man army, comprised of 2 warriors, 2 archers and 1 mage.
+    \n\nThe aim of the game is to defeat the other player's units.\nThe units are
+    selected by right-clicking and moved to the desired position by left-clicking,
+    provided the movement points are sufficient and there are no obstacles in the
+    way. If an enemy unit is within range at the end of the move, it is attacked.
+    There are two churches on the map, recognisable by their pointed roofs. If a
+    unit stops at the church, a few life points are restored.\n\nEach unit has individual
+    attack, defense and range characteristics which the players should use as skilfully
+    as possible. Damage is calculated based on these values and their respective
+    strength compared to others.\n\nThe warrior is an armoured unit that has short
+    movement and attack range, but is good at dealing and taking damage. Their armour
+    gives them a special advantage against mages.\n\nThe archers are a fast, powerful
+    unit. They can attack over a distance of two squares, but can't take much damage.
+    Their speed gives them an advantage over warriors.\n\nThe mages are a special
+    unit. Their arcane powers depend heavily on their condition on the day. Sometimes
+    they are very powerful, sometimes relatively weak, as can be seen from their
+    critical hits. They are neither as fast as archers nor as slow as warriors. While
+    their range is as long as that of archers, their armour is better, which gives
+    them an advantage.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
