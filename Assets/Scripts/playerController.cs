@@ -21,10 +21,11 @@ public class playerController : MonoBehaviour
     public int movementPoints;
 
     private selectController selectController;
-
+    private gameLogic gameLogic;
     public void Awake()
     {
-        selectController = GameObject.Find("GameLogic").GetComponent<selectController>();
+        selectController = GetComponentInParent<selectController>();
+        gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
     }
 
     private void Update()
@@ -73,7 +74,7 @@ public class playerController : MonoBehaviour
         }
         Debug.Log(role);
         Debug.Log((int)role);
-        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), selectController.range[(int)role]);
+        GameObject neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position), gameLogic.range[(int)role]);
 
             Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
             if (neighbour != null)
@@ -127,7 +128,7 @@ public class playerController : MonoBehaviour
 
     private bool CanMove(Vector3Int gridPosition)
     {
-        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) || selectController.checkForNeighboursNextPosition(gridPosition))
+        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) || selectController.checkForUnitNextPosition(gridPosition))
         {
             Debug.Log("here");
             return false;
