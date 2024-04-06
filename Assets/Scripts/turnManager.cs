@@ -28,6 +28,8 @@ public class turnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        setBorderColer(player1, Color.green);
+        setBorderColer(player2, Color.red);
         foreach (Transform entity in player1)
         {
             Debug.Log(entity.name);
@@ -64,16 +66,28 @@ public class turnManager : MonoBehaviour
         }
     }
 
+    private void setBorderColer(Transform player, Color color)
+    {
+        foreach (Transform child in player)
+        {
+            child.Find("Square").GetComponent<SpriteRenderer>().color = color;
+        }
+    }
+
     public void EndTurn()
     {
         if (_selectControllerPlayer1.enabled)
         {
+            setBorderColer(player2, Color.green);
+            setBorderColer(player1, Color.red);
             _player1Turn++;
             _selectControllerPlayer1.enabled = false;
         }
 
         if (_selectControllerPlayer2.enabled)
         {
+            setBorderColer(player1, Color.green);
+            setBorderColer(player2, Color.red);
             _player2Turn++;
             _selectControllerPlayer2.enabled = false;
             _gameTurn++;

@@ -30,6 +30,7 @@ public class selectController : MonoBehaviour
                 foreach (GameObject gameObjects in allies)
                 {
                     gameObjects.GetComponent<playerController>().enabled = false;
+                    gameObjects.GetComponent<playerController>().setBorder();
                 }
 
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
@@ -45,6 +46,7 @@ public class selectController : MonoBehaviour
                     {
                         Debug.Log("Figur von Spieler");
                         gameObjects.transform.GetComponent<playerController>().enabled = true;
+                        gameObjects.transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.yellow;
                         break;
                     }
                 }

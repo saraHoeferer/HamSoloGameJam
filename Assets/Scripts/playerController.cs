@@ -19,6 +19,8 @@ public class playerController : MonoBehaviour
     [SerializeField] Tilemap interactionMap;
     [SerializeField] Tilemap collisionMap;
 
+    [SerializeField] healthBar HealthBar;
+
     [SerializeField] GameObject nextPlayer;
 
     [SerializeField] Camera camera;
@@ -42,6 +44,35 @@ public class playerController : MonoBehaviour
         resetMovePoints();
     }
 
+    public void setBorder()
+    {
+        if (currentMovementPoints == 0)
+        {
+            transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.gray;
+        }
+        else
+        {
+            transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.green;
+        }
+    }
+
+    public void setHealth()
+    {
+        float healthPercentage = (float)health/gameLogic.health[(int)role];
+        if (healthPercentage < 0.7 && healthPercentage > 0.5)
+        {
+            HealthBar.setColor(Color.yellow);
+        } else if (healthPercentage <= 0.5)
+        {
+            HealthBar.setColor(Color.red);
+        }
+        else
+        {
+            HealthBar.setColor(Color.green);
+        }
+        HealthBar.setSize(healthPercentage);
+    }
+
     public void resetMovePoints()
     {
         currentMovementPoints = movementPoints;
@@ -54,6 +85,7 @@ public class playerController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                setHealth();
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
                 Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
@@ -63,7 +95,7 @@ public class playerController : MonoBehaviour
                 Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
 
                 moveTileByTile(movement);
-
+                
                 transform.GetComponent<playerController>().enabled = false;
 
                 /*
@@ -81,7 +113,7 @@ public class playerController : MonoBehaviour
 
     private IEnumerator WalkTile(int walk, Vector2 direction)
     {
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        WaitForSeconds wait = new WaitForSeconds(0.25f);
         for (int i = 0; i < walk; i++)
         {
             if (currentMovementPoints == 0)
@@ -109,6 +141,7 @@ public class playerController : MonoBehaviour
             neighbour.GetComponent<playerController>().health -= fightController.Attack(this,
                 neighbour.GetComponent<playerController>(), gameLogic);
             Debug.Log("New health: " + neighbour.GetComponent<playerController>().health);
+            neighbour.GetComponent<playerController>().setHealth();
             if (neighbour.GetComponent<playerController>().health <= 0)
             {
                 neighbour.SetActive(false);
@@ -119,6 +152,16 @@ public class playerController : MonoBehaviour
                 }
             }
         }
+        
+        if (currentMovementPoints == 0)
+        {
+            transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.gray;
+        }
+        else
+        {
+            transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.green;
+        }
+
     }
 
 
