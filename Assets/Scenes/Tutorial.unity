@@ -446,7 +446,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -422}
+  m_AnchoredPosition: {x: 0, y: -487}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1608073156
@@ -578,8 +578,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
-  m_SizeDelta: {x: -628.9546, y: -505.8289}
+  m_AnchoredPosition: {x: 8.180786, y: 25.775024}
+  m_SizeDelta: {x: -111.9863, y: -154.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1665743299
 MonoBehaviour:
@@ -653,8 +653,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0035934, y: -0.00031662}
-  m_SizeDelta: {x: 1291.1, y: 574.17}
+  m_AnchoredPosition: {x: -0.0075989, y: -0.0004921}
+  m_SizeDelta: {x: 1808, y: 925.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1695227799
 MonoBehaviour:
@@ -676,7 +676,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hier steht relativ genau Beschrieben wie das Spiel funktioniert
+  m_text: "In diesen kleinen taktischen Spiel treten zwei Spieler gegeneinander an.
+    \nJeder Spieler startet mit 5 Einheiten. 2 Krieger, 2 Bogensch\xFCtzen und 1
+    Magier. \n\nZiel des Spieles ist es die Einheiten des anderen Spieler zu besiegen.\nDie
+    Einheiten werden mit Rechtsklick ausgew\xE4hlt und mit Linksklick auf die gew\xFCnschte
+    Position gezogen, insofern die Bewegungspunkte daf\xFCr ausrreichen und keine
+    Hindernisse im Weg sein. Sollte am Ende der Bewegung eine gegenerische Einheit
+    in Reichweite sein, so wird diese angegriffen. Auf der Karte gibt es zwei Kirchen,
+    zu erkennen an ihrem spitzen Dach. Sollte eine Figur in der Kirche stehenbleiben,
+    so werden ein paar Lebenspunkte wiederhergestellt.\n\nJede Einheit hat spezielle
+    Eigenschaften welche die Spieler m\xF6glichst geschickt einsetzen sollen. Anhand
+    dieser Werte und ihrer  jeweiligen St\xE4rke gegn\xFCber anderen wird der Schaden
+    berechnet.\n\nDer Krieger ist eine gepanzerte Einheit welche zwar nur eine geringe
+    Bewegunsweite und Angriffsreichweite hat, daf\xFCr aber gut austeileien und einstecken
+    kann. Ihre R\xFCstung gibt ihnen einen Vorteil geg\xFCber Magier.\n\nDie Bogensch\xFCtzen
+    sind eine schnelle, stark austeilende Einheit. Sie k\xF6nnen \xFCber zwei Felder
+    Distanz angreifen, halten aber nicht viel aus. Ihre Schnelligkeit gibt ihnen
+    einen Vorteil gegen\xFCber den Kriegern.\n\nDie Magier sind eine besondere Einheit.
+    Ihre arkanen M\xE4chteganz von ihrer Tagesverfassung ab. Mal sind sie besonders
+    m\xE4chtig mal relativ schwach zu sehen an ihren kritischen Treffern. Sie sind
+    weder so schnell wie Bogensch\xFCtzen noch so langsam wie Bogensch\xFCtzen. W\xE4hrend
+    ihre Reichweite so gro\xDF ist wie die der Bogensch\xFCtzen, sind ihre R\xFCstungen
+    besser was ihnen einen Voreil verschafft."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -703,8 +724,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -739,7 +760,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 48.363174, y: 52.430786, z: 46.564575, w: 42.054703}
+  m_margin: {x: 48.363174, y: 44.875854, z: 46.564575, w: 42.054703}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
