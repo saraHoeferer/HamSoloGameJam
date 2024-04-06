@@ -92,20 +92,22 @@ public class selectController : MonoBehaviour
         List<GameObject> enemy = new List<GameObject>();
         foreach (GameObject gameObject in enemies)
         {
-            Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
-            Debug.Log("Position of Enemy " + enemyPosition);
-            Debug.Log("Position of Player " + position);
-            float distance = Vector3.Distance(position, enemyPosition);
-            Debug.Log("Distance between them " + distance);
-            if (distance <= range)
+            if (gameObject.activeSelf)
             {
-                Debug.Log(gameObject);
-                enemy.Add(gameObject);
-                return enemy;
+                Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
+                Debug.Log("Position of Enemy " + enemyPosition);
+                Debug.Log("Position of Player " + position);
+                float distance = Vector3.Distance(position, enemyPosition);
+                Debug.Log("Distance between them " + distance);
+                if (distance <= range)
+                {
+                    Debug.Log(gameObject);
+                    enemy.Add(gameObject);
+                }
             }
         }
 
-        return null;
+        return enemy;
     }
 
     public bool checkForUnitNextPosition(Vector3 position)

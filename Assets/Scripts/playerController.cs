@@ -100,21 +100,23 @@ public class playerController : MonoBehaviour
     {
         if (!SceneManager.GetSceneByName("Options").IsValid())
         {
+            remainingMoves.text = "Remaining Moves: " + currentMovementPoints;
+            unitClass.text = "Rolle: " + role;
+            
             if (Input.GetMouseButtonDown(0))
             {
-
                 setHealth();
                 destinationFlag.position = new Vector3(100, 100, 0);
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
                 Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
 
-                moveTileByTile(movement);
-                
-                remainingMoves.text = "Remaining Moves: " + currentMovementPoints;
-                unitClass.text = "Type: " + role;
+                if (currentMovementPoints > 0)
+                {
+                    moveTileByTile(movement);
+                }
 
-                
+
                 transform.GetComponent<playerController>().enabled = false;
                 
             }
@@ -187,11 +189,14 @@ public class playerController : MonoBehaviour
         
         if (interactionMap.GetSprite(position).name == "ChurchRed" || interactionMap.GetSprite(position).name == "ChurchBlue")
         {
+            currentMovementPoints = 0;
             OnChurch();
+            setHealth();
         }
         
-        if (neighbour != null)
+        if (neighbour.Count != 0)
         {
+            currentMovementPoints = 0;
             if (neighbour.Count == 1)
             {
                 neighbour.First().GetComponent<playerController>().health -= fightController.Attack(
