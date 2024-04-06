@@ -25,6 +25,25 @@ public class fightController : MonoBehaviour
         if (gameLogic.critChance[(int)attacker.role] > Random.Range(1, 101))
             damage += 5;
         Debug.Log("Damage: " + damage);
+        PlaySound((int)attacker.role);
         return damage;
+    }
+
+    private static void PlaySound(int role)
+    {
+        switch (role)
+        {
+            case 0:
+                GameObject.Find("EffectWarrior").GetComponent<AudioSource>().Play();
+                break;
+            case 1:
+                GameObject.Find("EffectBow").GetComponent<AudioSource>().Play();
+                break;
+            case 2:
+                GameObject.Find("EffectMage").GetComponent<AudioSource>().Play();
+                break;
+            default:
+                break;
+        }
     }
 }
