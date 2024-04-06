@@ -25,17 +25,27 @@ public class playerController : MonoBehaviour
     public playerRole role;
 
     public int movementPoints;
+    private int currentMovementPoints;
 
     private selectController selectController;
 
     private int health;
     
     private gameLogic gameLogic;
+
+    public bool alreadyMoved;
     public void Awake()
     {
         selectController = GetComponentInParent<selectController>();
         gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
         health = gameLogic.health[(int)role];
+        resetMovePoints();
+    }
+
+    public void resetMovePoints()
+    {
+        currentMovementPoints = movementPoints;
+        Debug.Log("movepoints reset: " + name + " remaining: " + currentMovementPoints);
     }
 
     private void Update()
@@ -68,11 +78,10 @@ public class playerController : MonoBehaviour
 
     private IEnumerator WalkTile(int walk, Vector2 direction)
     {
-        int movement = movementPoints;
         WaitForSeconds wait = new WaitForSeconds(0.5f);
         for (int i = 0; i < walk; i++)
         {
-            if (movement == 0)
+            if (currentMovementPoints == 0)
             {
                 break;
             }
@@ -81,8 +90,7 @@ public class playerController : MonoBehaviour
             {
                 break;
             }
-
-            movement--;
+            currentMovementPoints--;
             yield return wait;
         }
 

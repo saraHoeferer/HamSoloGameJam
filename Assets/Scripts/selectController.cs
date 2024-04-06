@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,6 +9,10 @@ public class selectController : MonoBehaviour
     [SerializeField] GameObject[] allies;
     [SerializeField] GameObject[] enemies;
 
+
+    private playerController[] _alliesController;
+    private playerController[] _enemiesController;
+    public Dictionary<GameObject, int> movePoints;
 
     // Update is called once per frame
     void Update()
@@ -71,3 +76,4 @@ public class selectController : MonoBehaviour
         return false;
     }
 }
+
