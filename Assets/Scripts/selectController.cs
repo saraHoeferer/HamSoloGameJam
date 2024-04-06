@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class selectController : MonoBehaviour
@@ -38,16 +34,12 @@ public class selectController : MonoBehaviour
         }
     }
 
-    public GameObject checkForEnemy(Vector3 poistion, int range) {
-        foreach (GameObject gameObjects in enemies) {
-            if (poistion + new Vector3(range,0,0) == interactionMap.WorldToCell(gameObjects.transform.position)) {
-                return gameObjects;
-            } else if (poistion + new Vector3(-range,0,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
-                return gameObjects;
-            } else if (poistion + new Vector3(0,range,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
-                return gameObjects;
-            } else if (poistion + new Vector3(0,-range,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
-                return gameObjects;
+    public GameObject checkForEnemy(Vector3 position, int range) {
+        foreach (GameObject gameObject in enemies) {
+            Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
+            float distance = Vector3.Distance(position, enemyPosition);
+            if (distance <= range) {
+                return gameObject;
             }
         }
         return null;
