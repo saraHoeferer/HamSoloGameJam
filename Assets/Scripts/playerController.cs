@@ -20,11 +20,11 @@ public class playerController : MonoBehaviour
 
     public int movementPoints;
 
-    private int[] range = {1, 3, 2};
+    private int[] range = {1, 3, 2}; //Get
 
-    public int health;
+    private int[] health = {10, 11, 12}; //Get
 
-    public int attack;
+    private int[] attack = {5, 6, 7}; //Get
 
     private selectController selectController;
 
@@ -82,7 +82,9 @@ public class playerController : MonoBehaviour
         GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), range[(int)role]);
 
             Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
-            if (neighbour != null) {
+            if (neighbour != null)
+            {
+                //fightController.attack(this, neighbour);
                 Debug.Log("ANGRIFF!");
             }
     }
