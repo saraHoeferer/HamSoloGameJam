@@ -40,8 +40,10 @@ public class selectController : MonoBehaviour
 
                 foreach (GameObject gameObjects in allies)
                 {
-                    Debug.Log("Korrdinaten von den Units " + interactionMap.WorldToCell(gameObjects.transform.position));
-                    if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
+                    Debug.Log("Korrdinaten von den Units " +
+                              interactionMap.WorldToCell(gameObjects.transform.position));
+                    if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) &&
+                        gameObjects.activeSelf)
                     {
                         Debug.Log("Figur von Spieler");
                         gameObjects.transform.GetComponent<playerController>().enabled = true;
@@ -49,7 +51,6 @@ public class selectController : MonoBehaviour
                     }
                 }
             }
-
         }
     }
 
@@ -63,16 +64,28 @@ public class selectController : MonoBehaviour
 
         return true;
     }
-
-    public GameObject checkForEnemy(Vector3 position, int range)
+    
+    public bool AllAlliesDead()
     {
+        foreach (var allie in allies)
+        {
+            if (allie.activeInHierarchy)
+                return false;
+        }
+
+        return true;
+    }
+
+    public List<GameObject> checkForEnemy(Vector3 position, int range)
+    {
+        List<GameObject> enemies = new List<GameObject>();
         foreach (GameObject gameObject in enemies)
         {
             Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
             float distance = Vector3.Distance(position, enemyPosition);
             if (distance <= range)
             {
-                return gameObject;
+                enemies.Add(gameObject);
             }
         }
 

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks.Sources;
-using Unity.VisualScripting;
+using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
 
 public enum playerRole
@@ -33,16 +32,16 @@ public class playerController : MonoBehaviour
     private int health;
 
     private gameLogic gameLogic;
-    
+
     public void Awake()
     {
         selectController = GetComponentInParent<selectController>();
         gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
         health = gameLogic.health[(int)role];
-        resetMovePoints();
+        ResetMovePoints();
     }
 
-    public void resetMovePoints()
+    public void ResetMovePoints()
     {
         currentMovementPoints = movementPoints;
         Debug.Log("movepoints reset: " + name + " remaining: " + currentMovementPoints);
@@ -93,28 +92,68 @@ public class playerController : MonoBehaviour
             {
                 break;
             }
+
             currentMovementPoints--;
             yield return wait;
         }
 
         Debug.Log(role);
-        Debug.Log((int)role);
 
-        GameObject neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
+        List<GameObject> neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
             gameLogic.range[(int)role]);
 
         Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
         if (neighbour != null)
         {
-            neighbour.GetComponent<playerController>().health -= fightController.Attack(this,
-                neighbour.GetComponent<playerController>(), gameLogic);
-            Debug.Log("New health: " + neighbour.GetComponent<playerController>().health);
-            if (neighbour.GetComponent<playerController>().health <= 0)
+            if (neighbour.Count == 1)
             {
-                neighbour.SetActive(false);
+                neighbour.First().GetComponent<playerController>().health -= fightController.Attack(
+                    this,
+                    neighbour.First().GetComponent<playerController>(),
+                    gameLogic);
+                Debug.Log("Normal Attack -> New health: " + neighbour.First().GetComponent<playerController>().health);
+            }
+            else
+            {
+                foreach (var enemie in neighbour)
+                {
+                    health -= fightController.Attack(
+                        enemie.GetComponent<playerController>(),
+                        this,
+                        gameLogic);
+                }
+
+                if (health <= 0)
+                {
+                    gameObject.SetActive(false);
+                    if (selectController.AllAlliesDead())
+                    {
+                        if (nextPlayer.name == "Player1")
+                            SceneManager.LoadScene("Player2Win");
+                        else
+                        {
+                            SceneManager.LoadScene("Player1Win");
+                        }
+
+                        SceneManager.UnloadSceneAsync("SaraScene");
+                    }
+                }
+            }
+
+            if (neighbour.First().GetComponent<playerController>().health <= 0)
+            {
+                neighbour.First().SetActive(false);
                 if (selectController.AllEnemiesDead())
                 {
-                    SceneManager.LoadScene("Win");
+                    if (gameObject.transform.parent.name == "Player1")
+                    {
+                        SceneManager.LoadScene("Player1Win");
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene("Player2Win");
+                    }
+
                     SceneManager.UnloadSceneAsync("SaraScene");
                 }
             }
