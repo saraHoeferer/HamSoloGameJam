@@ -6,7 +6,13 @@ using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
 
-public enum playerRole {Warrior = 0, Magician = 1, Archer = 2}
+public enum playerRole
+{
+    Warrior = 0,
+    Magician = 1,
+    Archer = 2
+}
+
 public class playerController : MonoBehaviour
 {
     [SerializeField] Tilemap interactionMap;
@@ -15,16 +21,19 @@ public class playerController : MonoBehaviour
     [SerializeField] GameObject nextPlayer;
 
     [SerializeField] Camera camera;
-    
+
     public playerRole role;
 
     public int movementPoints;
 
     private selectController selectController;
 
+    private int health;
+
     public void Awake()
     {
         selectController = GameObject.Find("GameLogic").GetComponent<selectController>();
+        health = selectController.health[(int)role];
     }
 
     private void Update()
@@ -37,12 +46,12 @@ public class playerController : MonoBehaviour
 
             Debug.Log(interactionMap.WorldToCell(transform.position));
             Debug.Log(gridPosition);
-            Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition)*-1);
+            Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
 
             moveTileByTile(movement);
 
             transform.GetComponent<playerController>().enabled = false;
-            
+
             /*
             Debug.Log(gridPosition);
             if (tilemap.HasTile(gridPosition))
@@ -53,7 +62,7 @@ public class playerController : MonoBehaviour
             */
         }
     }
-     
+
 
     private IEnumerator WalkTile(int walk, Vector2 direction)
     {
@@ -65,22 +74,31 @@ public class playerController : MonoBehaviour
             {
                 break;
             }
-            if (!Move(direction)) {
+
+            if (!Move(direction))
+            {
                 break;
             }
+
             movement--;
             yield return wait;
         }
+
         Debug.Log(role);
         Debug.Log((int)role);
-        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), selectController.range[(int)role]);
+        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position),
+            selectController.range[(int)role]);
 
-            Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
-            if (neighbour != null)
-            {
-                //fightController.attack(this, neighbour);
-                Debug.Log("ANGRIFF!");
-            }
+        Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
+        if (neighbour != null)
+        {
+            neighbour.GetComponent<playerController>().health -= fightController.Attack(this,
+                neighbour.GetComponent<playerController>(), selectController);
+            Debug.Log(health);
+            Debug.Log(neighbour.GetComponent<playerController>().health);
+            if (neighbour.GetComponent<playerController>().health <= 0)
+                neighbour.SetActive(false);
+        }
     }
 
 
@@ -88,51 +106,54 @@ public class playerController : MonoBehaviour
     {
         if (movement.x > 0)
         {
-           StartCoroutine(WalkTile(movement.x, new Vector2(1, 0)));
-        } else if (movement.x < 0)
+            StartCoroutine(WalkTile(movement.x, new Vector2(1, 0)));
+        }
+        else if (movement.x < 0)
         {
-           StartCoroutine(WalkTile((movement.x)*-1, new Vector2(-1, 0)));
-        } else if (movement.y > 0)
+            StartCoroutine(WalkTile((movement.x) * -1, new Vector2(-1, 0)));
+        }
+        else if (movement.y > 0)
         {
             StartCoroutine(WalkTile(movement.y, new Vector2(0, 1)));
-        } else if (movement.y < 0)
+        }
+        else if (movement.y < 0)
         {
-            StartCoroutine(WalkTile((movement.y)*-1, new Vector2(0, -1)));
+            StartCoroutine(WalkTile((movement.y) * -1, new Vector2(0, -1)));
         }
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("here");
-       
     }
+
     private bool Move(Vector2 direction)
     {
         Debug.Log(direction);
         direction.y = direction.y * 0.64f;
         direction.x = direction.x * 0.64f;
         Vector3Int gridPosition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
-       
-      
-        if (CanMove(gridPosition)) 
+
+
+        if (CanMove(gridPosition))
         {
             transform.position += (Vector3)direction;
             return true;
         }
-        return false;
 
-        
+        return false;
     }
 
     private bool CanMove(Vector3Int gridPosition)
     {
-        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) || selectController.checkForNeighboursNextPosition(gridPosition))
+        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) ||
+            selectController.checkForNeighboursNextPosition(gridPosition))
         {
             Debug.Log("here");
             return false;
         }
-        return true;    
+
+        return true;
     }
-    
 }

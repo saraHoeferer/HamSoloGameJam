@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,18 +7,24 @@ public class selectController : MonoBehaviour
     [SerializeField] Camera camera;
 
     [SerializeField] GameObject[] players;
-    
-    public int[] range = {1, 3, 2};
 
-    public int[] health = {10, 11, 12}; 
+    public int[] range = { 1, 2, 2 };
 
-    public int[] attack = {5, 6, 7};
+    public int[] health = { 10, 11, 12 };
+
+    public int[] attack = { 5, 6, 7 };
+
+    public int[] defense = { 1, 2, 3 };
+
+    public int[] critChance = { 0, 0, 0 };
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) {
-            foreach (GameObject gameObjects in players) {
+        if (Input.GetMouseButtonDown(1))
+        {
+            foreach (GameObject gameObjects in players)
+            {
                 gameObjects.GetComponent<playerController>().enabled = false;
             }
 
@@ -30,9 +33,11 @@ public class selectController : MonoBehaviour
 
             Debug.Log(gridPosition);
             Debug.Log(interactionMap.WorldToCell(transform.position));
-            
-            foreach (GameObject gameObjects in players) {
-                if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position)) {
+
+            foreach (GameObject gameObjects in players)
+            {
+                if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position))
+                {
                     gameObjects.transform.GetComponent<playerController>().enabled = true;
                     break;
                 }
@@ -40,27 +45,41 @@ public class selectController : MonoBehaviour
         }
     }
 
-    public GameObject checkForNeighbours(Vector3 poistion, int range) {
-        foreach (GameObject gameObjects in players) {
-            if (poistion + new Vector3(range,0,0) == interactionMap.WorldToCell(gameObjects.transform.position)) {
+    public GameObject checkForNeighbours(Vector3 poistion, int range)
+    {
+        foreach (GameObject gameObjects in players)
+        {
+            if (poistion + new Vector3(range, 0, 0) == interactionMap.WorldToCell(gameObjects.transform.position))
+            {
                 return gameObjects;
-            } else if (poistion + new Vector3(-range,0,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
+            }
+            else if (poistion + new Vector3(-range, 0, 0) == interactionMap.WorldToCell(gameObjects.transform.position))
+            {
                 return gameObjects;
-            } else if (poistion + new Vector3(0,range,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
+            }
+            else if (poistion + new Vector3(0, range, 0) == interactionMap.WorldToCell(gameObjects.transform.position))
+            {
                 return gameObjects;
-            } else if (poistion + new Vector3(0,-range,0) == interactionMap.WorldToCell(gameObjects.transform.position)){
+            }
+            else if (poistion + new Vector3(0, -range, 0) == interactionMap.WorldToCell(gameObjects.transform.position))
+            {
                 return gameObjects;
             }
         }
+
         return null;
     }
 
-    public bool checkForNeighboursNextPosition(Vector3 position){
-        foreach (GameObject gameObjects in players) {
-            if (position == interactionMap.WorldToCell(gameObjects.transform.position)) {
+    public bool checkForNeighboursNextPosition(Vector3 position)
+    {
+        foreach (GameObject gameObjects in players)
+        {
+            if (position == interactionMap.WorldToCell(gameObjects.transform.position))
+            {
                 return true;
             }
         }
+
         return false;
     }
 }
