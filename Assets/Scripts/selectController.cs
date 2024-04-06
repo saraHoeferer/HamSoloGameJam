@@ -83,7 +83,7 @@ public class selectController : MonoBehaviour
     {
         foreach (GameObject gameObjects in enemies)
         {
-            if (position == interactionMap.WorldToCell(gameObjects.transform.position))
+            if (position == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
             {
                 return true;
             }
@@ -91,7 +91,7 @@ public class selectController : MonoBehaviour
 
         foreach (GameObject gameObjects in allies)
         {
-            if (position == interactionMap.WorldToCell(gameObjects.transform.position))
+            if (position == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
             {
                 return true;
             }

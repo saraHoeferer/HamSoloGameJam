@@ -5956,7 +5956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 010000000300000002000000
   health: 0a0000000b0000000c000000
-  attack: 050000000600000007000000
+  attack: 640000006400000064000000
   defense: 010000000200000003000000
   critChance: 000000000000000000000000
 --- !u!4 &788447180
@@ -6246,6 +6246,9 @@ MonoBehaviour:
   enemies:
   - {fileID: 1619438442}
   - {fileID: 372433015}
+  - {fileID: 1524434913}
+  - {fileID: 1380854236}
+  - {fileID: 348580364}
 --- !u!1 &1154798847
 GameObject:
   m_ObjectHideFlags: 0
@@ -6439,7 +6442,7 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 5
+  movementPoints: 20
 --- !u!4 &1331323216
 Transform:
   m_ObjectHideFlags: 0
@@ -6490,7 +6493,7 @@ MonoBehaviour:
   nextPlayer: {fileID: 0}
   camera: {fileID: 519420031}
   role: 0
-  movementPoints: 5
+  movementPoints: 20
 --- !u!4 &1380854238
 Transform:
   m_ObjectHideFlags: 0
