@@ -33,7 +33,7 @@ public class selectController : MonoBehaviour
             foreach (GameObject gameObjects in allies)
             {
                 Debug.Log("Korrdinaten von den Units " + interactionMap.WorldToCell(gameObjects.transform.position));
-                if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position))
+                if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
                 {
                     Debug.Log("Figur von Spieler");
                     gameObjects.transform.GetComponent<playerController>().enabled = true;
