@@ -220,7 +220,7 @@ public class playerController : MonoBehaviour
                 {
                     if (selectController.AllAlliesDead() == 4)
                     {
-                        if (nextPlayer.name == "Player1")
+                        if (gameObject.transform.parent.name == "Player1")
                             SceneManager.LoadScene("Player2Win");
                         else
                         {

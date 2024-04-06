@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class WinScreen : MonoBehaviour
 {
-
     public void MainMenu()
     {
         SceneManager.LoadScene("Main Menu");
-        SceneManager.UnloadSceneAsync("Win");
+        if (SceneManager.GetSceneByName("Player1Win").IsValid())
+        {
+            SceneManager.UnloadSceneAsync("Player1Win");
+        }
+        else
+        {
+            SceneManager.UnloadSceneAsync("Player2Win");
+        }
     }
 }
