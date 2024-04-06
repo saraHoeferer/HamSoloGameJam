@@ -20,12 +20,6 @@ public class playerController : MonoBehaviour
 
     public int movementPoints;
 
-    private int[] range = {1, 3, 2}; //Get
-
-    private int[] health = {10, 11, 12}; //Get
-
-    private int[] attack = {5, 6, 7}; //Get
-
     private selectController selectController;
 
     public void Awake()
@@ -79,7 +73,7 @@ public class playerController : MonoBehaviour
         }
         Debug.Log(role);
         Debug.Log((int)role);
-        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), range[(int)role]);
+        GameObject neighbour = selectController.checkForNeighbours(interactionMap.WorldToCell(transform.position), selectController.range[(int)role]);
 
             Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
             if (neighbour != null)
