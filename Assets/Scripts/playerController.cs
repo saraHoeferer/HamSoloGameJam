@@ -26,13 +26,10 @@ public class playerController : MonoBehaviour
 
     public int attack;
 
-    private PlayerInputs controls;
-
     private selectController selectController;
 
     public void Awake()
     {
-        controls = new PlayerInputs();
         selectController = GameObject.Find("GameLogic").GetComponent<selectController>();
     }
 
@@ -107,23 +104,13 @@ public class playerController : MonoBehaviour
             StartCoroutine(WalkTile((movement.y)*-1, new Vector2(0, -1)));
         }
     }
-
-    public void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    public void OnDisable()
-    {
-        controls.Disable();
-    }
+    
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("here");
-        controls.Main.Movement.performed += ctx => Move(ctx.ReadValue<Vector2>());
+       
     }
-
     private bool Move(Vector2 direction)
     {
         Debug.Log(direction);
@@ -151,4 +138,5 @@ public class playerController : MonoBehaviour
         }
         return true;    
     }
+    
 }
