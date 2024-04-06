@@ -98,11 +98,19 @@ public class playerController : MonoBehaviour
         }
 
         Debug.Log(role);
-
+        
         List<GameObject> neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
             gameLogic.range[(int)role]);
 
         Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
+        
+        Vector3Int position = interactionMap.WorldToCell(transform.position);
+        
+        if (interactionMap.GetSprite(position).name == "ChurchRed" || interactionMap.GetSprite(position).name == "ChurchBlue")
+        {
+            OnChurch();
+        }
+        
         if (neighbour != null)
         {
             if (neighbour.Count == 1)
@@ -209,10 +217,19 @@ public class playerController : MonoBehaviour
         if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) ||
             selectController.checkForUnitNextPosition(gridPosition))
         {
-            Debug.Log("here");
             return false;
         }
 
         return true;
+    }
+
+    private void OnChurch()
+    {
+        Debug.Log("OnChurch");
+        health += 5;
+        if (health > gameLogic.health[(int)role])
+        {
+            health = gameLogic.health[(int)role];
+        }
     }
 }
