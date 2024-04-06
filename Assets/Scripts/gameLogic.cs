@@ -9,6 +9,11 @@ public class gameLogic : MonoBehaviour
     public int[] health = {10, 11, 12}; 
 
     public int[] attack = {5, 6, 7};
+    
+    public int[] defense = { 1, 2, 3 };
+
+    public int[] critChance = { 0, 0, 0 };
+
     // Start is called before the first frame update
     void Start()
     {
