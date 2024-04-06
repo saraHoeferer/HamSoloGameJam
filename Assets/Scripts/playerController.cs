@@ -132,8 +132,8 @@ public class playerController : MonoBehaviour
     private bool Move(Vector2 direction)
     {
         Debug.Log(direction);
-        direction.y = direction.y * 0.64f;
-        direction.x = direction.x * 0.64f;
+        direction.y = direction.y * 0.16f;
+        direction.x = direction.x * 0.16f;
         Vector3Int gridPosition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
 
 
