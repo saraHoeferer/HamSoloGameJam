@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks.Sources;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
 
@@ -30,10 +31,9 @@ public class playerController : MonoBehaviour
     private selectController selectController;
 
     private int health;
-    
-    private gameLogic gameLogic;
 
-    public bool alreadyMoved;
+    private gameLogic gameLogic;
+    
     public void Awake()
     {
         selectController = GetComponentInParent<selectController>();
@@ -50,28 +50,31 @@ public class playerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!SceneManager.GetSceneByName("Options").IsValid())
         {
-            Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
-            Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
-
-            Debug.Log(interactionMap.WorldToCell(transform.position));
-            Debug.Log(gridPosition);
-            Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
-
-            moveTileByTile(movement);
-
-            transform.GetComponent<playerController>().enabled = false;
-
-            /*
-            Debug.Log(gridPosition);
-            if (tilemap.HasTile(gridPosition))
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("tile existend");
-                Debug.Log(tilemap.GetTile(gridPosition).name);
+                Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
+                Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
+
+                Debug.Log(interactionMap.WorldToCell(transform.position));
+                Debug.Log(gridPosition);
+                Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
+
+                moveTileByTile(movement);
+
+                transform.GetComponent<playerController>().enabled = false;
+
+                /*
+                Debug.Log(gridPosition);
+                if (tilemap.HasTile(gridPosition))
+                {
+                    Debug.Log("tile existend");
+                    Debug.Log(tilemap.GetTile(gridPosition).name);
+                }
+                */
             }
-            */
         }
     }
 
@@ -97,8 +100,9 @@ public class playerController : MonoBehaviour
         Debug.Log(role);
         Debug.Log((int)role);
 
-        GameObject neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position), gameLogic.range[(int)role]);
-        
+        GameObject neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
+            gameLogic.range[(int)role]);
+
         Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
         if (neighbour != null)
         {
@@ -106,7 +110,14 @@ public class playerController : MonoBehaviour
                 neighbour.GetComponent<playerController>(), gameLogic);
             Debug.Log("New health: " + neighbour.GetComponent<playerController>().health);
             if (neighbour.GetComponent<playerController>().health <= 0)
+            {
                 neighbour.SetActive(false);
+                if (selectController.AllEnemiesDead())
+                {
+                    SceneManager.LoadScene("Win");
+                    SceneManager.UnloadSceneAsync("SaraScene");
+                }
+            }
         }
     }
 
@@ -156,7 +167,8 @@ public class playerController : MonoBehaviour
 
     private bool CanMove(Vector3Int gridPosition)
     {
-        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) || selectController.checkForUnitNextPosition(gridPosition))
+        if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) ||
+            selectController.checkForUnitNextPosition(gridPosition))
         {
             Debug.Log("here");
             return false;
