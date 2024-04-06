@@ -62,6 +62,11 @@ public class playerController : MonoBehaviour
 
     public void setHealth()
     {
+        Debug.Log("Health Änderung");
+        Debug.Log(health);
+        Debug.Log(gameLogic.health[(int)role]);
+        Debug.Log(transform.name);
+        
         float healthPercentage = (float)health/gameLogic.health[(int)role];
         if (healthPercentage < 0.7 && healthPercentage > 0.5)
         {
@@ -103,10 +108,6 @@ public class playerController : MonoBehaviour
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
                 Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
-
-                Debug.Log(interactionMap.WorldToCell(transform.position));
-                Debug.Log(gridPosition);
-                Debug.Log((interactionMap.WorldToCell(transform.position) - gridPosition) * -1);
 
                 moveTileByTile(movement);
                 
@@ -181,8 +182,6 @@ public class playerController : MonoBehaviour
         
         List<GameObject> neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
             gameLogic.range[(int)role]);
-
-        Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
         
         Vector3Int position = interactionMap.WorldToCell(transform.position);
         
@@ -193,7 +192,6 @@ public class playerController : MonoBehaviour
         
         if (neighbour != null)
         {
-
             if (neighbour.Count == 1)
             {
                 neighbour.First().GetComponent<playerController>().health -= fightController.Attack(
