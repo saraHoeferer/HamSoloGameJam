@@ -22,7 +22,6 @@ public class selectController : MonoBehaviour
         }
         foreach (Transform enemy in opponent)
         {
-            Debug.Log(enemy);
             enemies.Add(enemy.gameObject);
         }
     }

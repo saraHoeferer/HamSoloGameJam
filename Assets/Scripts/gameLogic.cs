@@ -14,6 +14,7 @@ public class gameLogic : MonoBehaviour
 
     public int[] critChance = { 0, 0, 0 };
 
+    public int[] movementSpeed = {0, 0, 0};
     // Start is called before the first frame update
     void Start()
     {

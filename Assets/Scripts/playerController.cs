@@ -28,7 +28,6 @@ public class playerController : MonoBehaviour
 
     private TextMeshProUGUI remainingMoves;
     private TextMeshProUGUI unitClass;
-    public int movementPoints;
     private int currentMovementPoints;
 
     private selectController selectController;
@@ -85,7 +84,7 @@ public class playerController : MonoBehaviour
     public void ResetMovePoints()
 
     {
-        currentMovementPoints = movementPoints;
+        currentMovementPoints = gameLogic.movementSpeed[(int)role];
     }
 
     public void enableFlag()
@@ -162,7 +161,7 @@ public class playerController : MonoBehaviour
 
     private IEnumerator WalkTile(int walk, Vector2 direction)
     {
-        WaitForSeconds wait = new WaitForSeconds(0.25f);
+        WaitForSeconds wait = new WaitForSeconds(0.15f);
         for (int i = 0; i < walk; i++)
         {
             if (currentMovementPoints == 0)
