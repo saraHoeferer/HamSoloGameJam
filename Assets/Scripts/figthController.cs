@@ -17,14 +17,14 @@ public class fightController : MonoBehaviour
     {
     }
 
-    public static int Attack(playerController attacker, playerController defender, selectController selectController)
+    public static int Attack(playerController attacker, playerController defender, gameLogic gameLogic)
     {
         int damage;
-        int diff = selectController.attack[(int)attacker.role] - selectController.defense[(int)defender.role];
+        int diff = gameLogic.attack[(int)attacker.role] - gameLogic.defense[(int)defender.role];
         damage = diff + Random.Range(-3, 4);
-        if (selectController.critChance[(int)attacker.role] > Random.Range(1, 101))
+        if (gameLogic.critChance[(int)attacker.role] > Random.Range(1, 101))
             damage += 5;
-        Debug.Log(damage);
+        Debug.Log("Damage: " + damage);
         return damage;
     }
 }

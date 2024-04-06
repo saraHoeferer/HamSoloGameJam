@@ -35,7 +35,7 @@ public class playerController : MonoBehaviour
     {
         selectController = GetComponentInParent<selectController>();
         gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
-        health = selectController.health[(int)role];
+        health = gameLogic.health[(int)role];
     }
 
     private void Update()
@@ -95,9 +95,8 @@ public class playerController : MonoBehaviour
         if (neighbour != null)
         {
             neighbour.GetComponent<playerController>().health -= fightController.Attack(this,
-                neighbour.GetComponent<playerController>(), selectController);
-            Debug.Log(health);
-            Debug.Log(neighbour.GetComponent<playerController>().health);
+                neighbour.GetComponent<playerController>(), gameLogic);
+            Debug.Log("New health: " + neighbour.GetComponent<playerController>().health);
             if (neighbour.GetComponent<playerController>().health <= 0)
                 neighbour.SetActive(false);
         }
