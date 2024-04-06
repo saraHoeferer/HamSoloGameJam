@@ -7,14 +7,24 @@ public class selectController : MonoBehaviour
 {
     [SerializeField] Tilemap interactionMap;
     [SerializeField] Camera camera;
-    [SerializeField] GameObject[] allies;
-    [SerializeField] GameObject[] enemies;
+
+    [SerializeField] private Transform opponent;
+
+    private List<GameObject> allies = new List<GameObject>();
+    private List<GameObject> enemies = new List<GameObject>();
 
 
-    private playerController[] _alliesController;
-    private playerController[] _enemiesController;
-    public Dictionary<GameObject, int> movePoints;
-
+    void Start()
+    {
+        foreach (Transform ally in transform)
+        {
+            allies.Add(ally.gameObject);
+        }
+        foreach (Transform enemy in opponent)
+        {
+            enemies.Add(enemy.gameObject);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -36,45 +46,56 @@ public class selectController : MonoBehaviour
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
 
-                Debug.Log(gridPosition);
-
-
                 foreach (GameObject gameObjects in allies)
                 {
-                    Debug.Log("Korrdinaten von den Units " + interactionMap.WorldToCell(gameObjects.transform.position));
+
                     if (gridPosition == interactionMap.WorldToCell(gameObjects.transform.position) && gameObjects.activeSelf)
                     {
-                        Debug.Log("Figur von Spieler");
                         gameObjects.transform.GetComponent<playerController>().enabled = true;
+
                         gameObjects.transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.yellow;
+
+                        gameObjects.transform.GetComponent<playerController>().enableFlag();
+
                         break;
                     }
                 }
             }
-
         }
     }
 
     public bool AllEnemiesDead()
     {
-        foreach (var enemie in enemies)
+        foreach (var enemy in enemies)
         {
-            if (enemie.activeInHierarchy)
+            if (enemy.activeInHierarchy)
+                return false;
+        }
+
+        return true;
+    }
+    
+    public bool AllAlliesDead()
+    {
+        foreach (var ally in allies)
+        {
+            if (ally.activeInHierarchy)
                 return false;
         }
 
         return true;
     }
 
-    public GameObject checkForEnemy(Vector3 position, int range)
+    public List<GameObject> checkForEnemy(Vector3 position, int range)
     {
+        List<GameObject> enemies = new List<GameObject>();
         foreach (GameObject gameObject in enemies)
         {
             Vector3 enemyPosition = interactionMap.WorldToCell(gameObject.transform.position);
             float distance = Vector3.Distance(position, enemyPosition);
             if (distance <= range)
             {
-                return gameObject;
+                enemies.Add(gameObject);
             }
         }
 
@@ -98,7 +119,6 @@ public class selectController : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 }

@@ -99,11 +99,11 @@ public class turnManager : MonoBehaviour
     {
         foreach (Transform unit in _entitiesPlayer1)
         {
-            unit.GetComponent<playerController>().resetMovePoints();
+            unit.GetComponent<playerController>().ResetMovePoints();
         }
         foreach (Transform unit in _entitiesPlayer2)
         {
-            unit.GetComponent<playerController>().resetMovePoints();
+            unit.GetComponent<playerController>().ResetMovePoints();
         }
     }
 }

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks.Sources;
-using Unity.VisualScripting;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Tilemaps;
 
 public enum playerRole
@@ -27,21 +26,26 @@ public class playerController : MonoBehaviour
 
     public playerRole role;
 
+    private TextMeshProUGUI remainingMoves;
+    private TextMeshProUGUI unitClass;
     public int movementPoints;
     private int currentMovementPoints;
 
     private selectController selectController;
-
     private int health;
-
     private gameLogic gameLogic;
-    
+    private bool showDestination;
+    private Transform destinationFlag;
+
     public void Awake()
     {
         selectController = GetComponentInParent<selectController>();
         gameLogic = GameObject.Find("Gamge").GetComponent<gameLogic>();
         health = gameLogic.health[(int)role];
-        resetMovePoints();
+        ResetMovePoints();
+        remainingMoves = GameObject.Find("MovementCountText").GetComponent<TextMeshProUGUI>();
+        unitClass = GameObject.Find("UnitClassText").GetComponent<TextMeshProUGUI>();
+        destinationFlag = GameObject.Find("Destination").transform;
     }
 
     public void setBorder()
@@ -72,11 +76,19 @@ public class playerController : MonoBehaviour
         }
         HealthBar.setSize(healthPercentage);
     }
+    
+    public void ResetMovePoints()
 
-    public void resetMovePoints()
     {
         currentMovementPoints = movementPoints;
-        Debug.Log("movepoints reset: " + name + " remaining: " + currentMovementPoints);
+    }
+
+    public void enableFlag()
+    {
+        if (currentMovementPoints > 0)
+        {
+            showDestination = true;
+        }
     }
 
     private void Update()
@@ -85,7 +97,9 @@ public class playerController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+
                 setHealth();
+                destinationFlag.position = new Vector3(100, 100, 0);
                 Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = interactionMap.WorldToCell(mousePosition);
                 Vector3Int movement = (interactionMap.WorldToCell(transform.position) - gridPosition) * -1;
@@ -96,16 +110,48 @@ public class playerController : MonoBehaviour
 
                 moveTileByTile(movement);
                 
-                transform.GetComponent<playerController>().enabled = false;
+                remainingMoves.text = "Remaining Moves: " + currentMovementPoints;
+                unitClass.text = "Type: " + role;
 
-                /*
-                Debug.Log(gridPosition);
-                if (tilemap.HasTile(gridPosition))
+                
+                transform.GetComponent<playerController>().enabled = false;
+                
+            }
+
+            if (showDestination)
+            {
+                Vector2 hoverPosition = camera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3Int hoverGridPosition = interactionMap.WorldToCell(hoverPosition);
+                Vector3Int difference = (interactionMap.WorldToCell(transform.position) - hoverGridPosition) * -1;
+
+                if (difference.x != 0)
                 {
-                    Debug.Log("tile existend");
-                    Debug.Log(tilemap.GetTile(gridPosition).name);
+                    if (difference.x > currentMovementPoints)
+                    {
+                        difference.x = currentMovementPoints;
+                    }
+                    else if (difference.x < currentMovementPoints * -1)
+                    {
+                        difference.x = currentMovementPoints * -1;
+                    }
+                    destinationFlag.position = new Vector3(transform.position.x + difference.x * 0.16f,
+                        transform.position.y,
+                        transform.position.z);
                 }
-                */
+                else if (difference.y != 0)
+                {
+                    if (difference.y > currentMovementPoints)
+                    {
+                        difference.y = currentMovementPoints;
+                    }
+                    else if (difference.y < currentMovementPoints * -1)
+                    {
+                        difference.y = currentMovementPoints * -1;
+                    }
+                    destinationFlag.position = new Vector3(transform.position.x,
+                        transform.position.y + difference.y * 0.16f,
+                        transform.position.z);
+                }
             }
         }
     }
@@ -125,29 +171,80 @@ public class playerController : MonoBehaviour
             {
                 break;
             }
+
             currentMovementPoints--;
             yield return wait;
         }
 
-        Debug.Log(role);
-        Debug.Log((int)role);
-
-        GameObject neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
+        destinationFlag.position = new Vector3(100, 100, 0);
+        showDestination = false;
+        
+        List<GameObject> neighbour = selectController.checkForEnemy(interactionMap.WorldToCell(transform.position),
             gameLogic.range[(int)role]);
 
         Debug.Log("Player position " + interactionMap.WorldToCell(transform.position));
+        
+        Vector3Int position = interactionMap.WorldToCell(transform.position);
+        
+        if (interactionMap.GetSprite(position).name == "ChurchRed" || interactionMap.GetSprite(position).name == "ChurchBlue")
+        {
+            OnChurch();
+        }
+        
         if (neighbour != null)
         {
-            neighbour.GetComponent<playerController>().health -= fightController.Attack(this,
-                neighbour.GetComponent<playerController>(), gameLogic);
-            Debug.Log("New health: " + neighbour.GetComponent<playerController>().health);
-            neighbour.GetComponent<playerController>().setHealth();
-            if (neighbour.GetComponent<playerController>().health <= 0)
+
+            if (neighbour.Count == 1)
             {
-                neighbour.SetActive(false);
+                neighbour.First().GetComponent<playerController>().health -= fightController.Attack(
+                    this,
+                    neighbour.First().GetComponent<playerController>(),
+                    gameLogic);
+                neighbour.First().GetComponent<playerController>().setHealth();
+                Debug.Log("Normal Attack -> New health: " + neighbour.First().GetComponent<playerController>().health);
+            }
+            else
+            {
+                foreach (var enemie in neighbour)
+                {
+                    health -= fightController.Attack(
+                        enemie.GetComponent<playerController>(),
+                        this,
+                        gameLogic);
+                    setHealth();
+                }
+
+                if (health <= 0)
+                {
+                    gameObject.SetActive(false);
+                    if (selectController.AllAlliesDead())
+                    {
+                        if (nextPlayer.name == "Player1")
+                            SceneManager.LoadScene("Player2Win");
+                        else
+                        {
+                            SceneManager.LoadScene("Player1Win");
+                        }
+
+                        SceneManager.UnloadSceneAsync("SaraScene");
+                    }
+                }
+            }
+
+            if (neighbour.First().GetComponent<playerController>().health <= 0)
+            {
+                neighbour.First().SetActive(false);
                 if (selectController.AllEnemiesDead())
                 {
-                    SceneManager.LoadScene("Win");
+                    if (gameObject.transform.parent.name == "Player1")
+                    {
+                        SceneManager.LoadScene("Player1Win");
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene("Player2Win");
+                    }
+
                     SceneManager.UnloadSceneAsync("SaraScene");
                 }
             }
@@ -193,7 +290,6 @@ public class playerController : MonoBehaviour
 
     private bool Move(Vector2 direction)
     {
-        Debug.Log(direction);
         direction.y = direction.y * 0.16f;
         direction.x = direction.x * 0.16f;
         Vector3Int gridPosition = interactionMap.WorldToCell(transform.position + (Vector3)(direction));
@@ -204,7 +300,6 @@ public class playerController : MonoBehaviour
             transform.position += (Vector3)direction;
             return true;
         }
-
         return false;
     }
 
@@ -213,10 +308,19 @@ public class playerController : MonoBehaviour
         if (!interactionMap.HasTile(gridPosition) || collisionMap.HasTile(gridPosition) ||
             selectController.checkForUnitNextPosition(gridPosition))
         {
-            Debug.Log("here");
             return false;
         }
 
         return true;
+    }
+
+    private void OnChurch()
+    {
+        Debug.Log("OnChurch");
+        health += 5;
+        if (health > gameLogic.health[(int)role])
+        {
+            health = gameLogic.health[(int)role];
+        }
     }
 }
